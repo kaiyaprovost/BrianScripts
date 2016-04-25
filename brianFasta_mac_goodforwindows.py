@@ -27,6 +27,8 @@ def lociAmbigFilter(lines,outfile,thresh):
                         if i[0] == ">":
                             ## print the name plus the number of real bases over the total bases
                             print >>outfile, i+"_"+str(baseCount)+"/"+str(baseCount+ambigCount)
+                            ## print the name
+                            print >>outfile, i
                         else:
                             ## otherwise, print the line
                             print >>outfile, i
