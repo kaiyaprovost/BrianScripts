@@ -1,0 +1,61 @@
+##can you make me four separate csv files
+##(tropical montane, tropical lowland, temperate lowland, temperate montane)
+##containing species data where the files are separated
+##based on the partition in the species list (species-list-partition.csv)?
+##
+##the full species data files is split_data.txt
+
+def main():
+    print "main"
+
+    pwd = "C:/Users/Kaiya/Desktop/"
+    dataFile = "split_data.txt"
+    csvFile = "species-list-partition.csv"
+
+    with open(pwd+csvFile,"rU") as csvRead:
+        csvLines = csvRead.readlines()
+
+    partDict = {}
+    for line in csvLines:
+        split = line.split(",")
+        spp = split[0]
+        part = split[-1].strip()
+        partDict[spp] = part
+    
+    #print partDict["Agelaius-phoeniceus"]
+
+    with open(pwd+dataFile,"rU") as dataRead:
+        dataLines = dataRead.readlines()
+
+    with open(pwd+"split_data_tropMont.txt", "w") as tropMont, open(pwd+"split_data_tempMont.txt", "w") as tempMont:
+        with open(pwd+"split_data_tropLowl.txt", "w") as tropLowl, open(pwd+"split_data_tempLowl.txt", "w") as tempLowl:
+            with open(pwd+"split_data_wontSort.txt","w") as wontSort:
+                for i in range(len(dataLines)):
+                    if i == 0:
+                        ## line is header
+                        print "header"
+                        print >> tropMont, dataLines[i],
+                        print >> tempMont, dataLines[i],
+                        print >> tropLowl, dataLines[i],
+                        print >> tempLowl, dataLines[i],
+                        print >> wontSort, dataLines[i],
+                    else:
+                        split = dataLines[i].split("\t")
+                        spp = split[0]
+                        #print spp
+                        part = partDict.get(spp)
+                        
+                        if part == "Tropical.Montane":
+                            print >> tropMont, dataLines[i],
+                        elif part == "Temperate.Montane":
+                            print >> tempMont, dataLines[i],
+                        elif part == "Tropical.Lowland":
+                            print >> tropLowl, dataLines[i],
+                        elif part == "Temperate.Lowland":
+                            print >> tempLowl, dataLines[i],
+                        else:
+                            print "ERROR",part,dataLines[i][0:50]
+                            print >> wontSort, dataLines[i],
+
+if __name__ == "__main__":
+    main()
